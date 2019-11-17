@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dropwizard OAuth 2.0 Example</title>
+    <base href="/">
+
+    <script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/js/okta-sign-in.min.js" type="text/javascript"></script>
+    <link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/css/okta-sign-in.min.css" type="text/css" rel="stylesheet">
+    <link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/2.6.0/css/okta-theme.css" type="text/css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+<!-- Render the login widget here -->
+<div id="okta-login-container"></div>
+
+<div class="container">
+    <!-- Render the REST response here -->
+    <div id="api-message"></div>
+
+    <!-- And a logout button, hidden by default -->
+    <button id="logout" type="button" class="btn btn-danger" style="display:none">Logout</button>
+</div>
+<script>
+    $.ajax({
+        url: "/api/login",
+    }).then(function(data) {
+
+        // we are priming our config object with data retrieved from the server in order to make this example easier to run
+        // You could statically define your config like if you wanted too:
+        /*
+        let config = {
+          baseUrl: 'https://{yourOktaDomain}',
+          clientId: '00icu81200icu812w0h7',
+          redirectUri: 'http://localhost:8080',
+          authParams: {
+            issuer: 'https://{yourOktaDomain}/oauth2/default',
+            responseType: ['id_token', 'token']
+          }
+        }; */
+
+        window.oktaSignIn = new OktaSignIn({
+            baseUrl: data.baseUrl,
+            clientId: data.clientId,
+            redirectUri: window.location.href,
+            authParams: {
+                issuer: data.issuer,
+                responseType: ['id_token', 'token'],
+                scopes: ["openid", "profile"]
+            }
+        });
+
+        // handle the rest of the page
+        doInit();
+    });
+
+    /**
+     * Makes a request to a REST resource and displays a simple message to the page.
+     * @param accessToken The access token used for the auth header
+     */
+    function renderApiMessage(accessToken) {
+        // include the Bearer token in the request
+        // $.ajax({
+        //     url: "/api/message",
+        //     headers: {
+        //         'Authorization': "Bearer " + accessToken
+        //     },
+        // }).then(function(data) {
+        //     // Render the message of the day
+        //     var temp = JSON.stringify(data);
+        //     let htmlToRender = `
+        //     <h1>Message:
+        //       <small>/api/message</small>
+        //     </h1>
+        //     <p>${temp}</p>`;
+        //
+        //     $('#api-message').append(htmlToRender);
+        // })
+        //     .fail(function(data) {
+        //         // handle any errors
+        //         $('#api-message').append("ERROR, check your browsers console log!");
+        //         console.log("ERROR!!");
+        //         console.log(data.responseJSON);
+        //     });
+
+        $.ajax({
+            url: "/api/users/user-profile",
+            headers: {
+                'Authorization': "Bearer " + accessToken
+            },
+        }).then(function(data) {
+            // Render the message of the day
+            var temp2 = JSON.stringify(data);
+            let htmlToRender = `
+            <h1>Message:
+              <small>/api/userprofile</small>
+            </h1>
+            <p>${temp2}</p>`;
+
+            $('#api-message').append(htmlToRender);
+        })
+            .fail(function(data) {
+                // handle any errors
+                $('#api-message').append("ERROR, check your browsers console log!");
+                console.log("ERROR!!");
+                console.log(data.responseJSON);
+            });
+
+        // show the logout button
+        $( "#logout" )[0].style.display = 'block';
+    }
+
+    function doInit() {
+
+        $( "#logout" ).click(function() {
+            oktaSignIn.signOut(() => {
+                oktaSignIn.tokenManager.clear();
+            location.reload();
+        });
+        });
+
+        // Check if we already have an access token
+        const token = oktaSignIn.tokenManager.get('my_access_token');
+
+        // if we do great, just go with it!
+        if (token) {
+            renderApiMessage(token.accessToken)
+        } else {
+
+            // otherwise show the login widget
+            oktaSignIn.renderEl(
+                {el: '#okta-login-container'},
+                function (response) {
+
+                    // check if success
+                    if (response.status === 'SUCCESS') {
+
+                        // for our example we have the id token and the access token
+                        // oktaSignIn.tokenManager.add('my_id_token', response[0]);
+                        oktaSignIn.tokenManager.add('my_access_token', response[1]);
+
+                        // hide the widget
+                        oktaSignIn.hide();
+
+                        // now for the fun part!
+                        renderApiMessage(response[1].accessToken);
+                    }
+                },
+                function (err) {
+                    // handle any errors
+                    console.log(err);
+                }
+            );
+        }
+    }
+</script>
+</body>
+</html>
