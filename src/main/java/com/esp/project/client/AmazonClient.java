@@ -1,4 +1,4 @@
-package com.esp.project.services;
+package com.esp.project.client;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;

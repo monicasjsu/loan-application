@@ -2,7 +2,7 @@ package com.esp.project.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.esp.project.auth.AccessTokenPrincipal;
-import com.esp.project.services.ApplicationClient;
+import com.esp.project.client.ApplicationClient;
 import com.esp.project.models.FileData;
 import com.esp.project.models.LoanData;
 import io.dropwizard.auth.Auth;

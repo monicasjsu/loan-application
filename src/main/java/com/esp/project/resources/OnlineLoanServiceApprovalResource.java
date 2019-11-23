@@ -1,7 +1,7 @@
 package com.esp.project.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.esp.project.services.ApplicationClient;
+import com.esp.project.client.ApplicationClient;
 import com.esp.project.models.LoanData;
 import com.esp.project.models.LoanStatus;
 import com.esp.project.models.LoanType;

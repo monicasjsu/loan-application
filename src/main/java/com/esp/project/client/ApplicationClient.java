@@ -1,4 +1,4 @@
-package com.esp.project.services;
+package com.esp.project.client;
 
 import com.esp.project.db.Queries;
 import com.esp.project.models.FileData;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.esp.project.services.AmazonClient.BUCKET_NAME;
+import static com.esp.project.client.AmazonClient.BUCKET_NAME;
 
 public class ApplicationClient {
 

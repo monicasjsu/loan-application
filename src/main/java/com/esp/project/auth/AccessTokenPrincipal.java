@@ -2,7 +2,6 @@ package com.esp.project.auth;
 
 import com.okta.jwt.Jwt;
 
-import javax.security.auth.Subject;
 import java.security.Principal;
 import java.util.List;
 
@@ -11,7 +10,6 @@ public class AccessTokenPrincipal implements Principal {
 	private final Jwt decodedAccessToken;
 
 	protected AccessTokenPrincipal(final Jwt decodedAccessToken) {
-
 		this.decodedAccessToken = decodedAccessToken;
 	}
 

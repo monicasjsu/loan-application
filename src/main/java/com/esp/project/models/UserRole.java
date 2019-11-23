@@ -1,7 +1,5 @@
 package com.esp.project.models;
 
-import javax.annotation.security.RolesAllowed;
-
 public enum UserRole {
 	APPROVER("loanAppAdmin"),
 	APPLICANT("applicant"),
@@ -10,12 +8,10 @@ public enum UserRole {
 	private final String userRole;
 
 	UserRole(final String userRole) {
-
 		this.userRole = userRole;
 	}
 
 	public String getUserRole() {
-
 		return this.userRole;
 	}
 
