@@ -8,11 +8,7 @@ import com.esp.project.models.LoanType;
 import org.jvnet.hk2.annotations.Optional;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -42,5 +38,17 @@ public class OnlineLoanServiceApprovalResource {
 		} catch (Exception ex) {
 			return exception("NewApplicationLoan exception", ex);
 		}
+	}
+
+	@Path("{loanId}/updateLoanStatus")
+	@GET
+	public Response updateStatus(@QueryParam("status") final LoanStatus loanStatus, @PathParam("loanId") final long loanId) {
+		try {
+			applicationClient.updateLoanStatus(loanId,loanStatus);
+			return Response.ok().build();
+		} catch (Exception ex) {
+			return exception("Error while updating the status", ex);
+		}
+
 	}
 }

@@ -6,10 +6,7 @@ import com.esp.project.models.LoanData;
 import com.esp.project.models.LoanType;
 import com.esp.project.models.User;
 import com.esp.project.models.UserRole;
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
-import org.skife.jdbi.v2.sqlobject.SqlQuery;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import java.util.List;
@@ -46,13 +43,26 @@ public interface Queries {
 	                    @Bind("phone") String phone,
 	                    @Bind("address") String address);
 
+
+	@SqlUpdate("UPDATE user_temp " +
+			"SET user_role = :user_role, firstname = :firstname, lastname = :lastname, phone = :phone, address = :address " +
+			"where id = :userId;")
+	int updateUserQuery(@Bind("userId") String userId,
+						 @Bind("user_role") UserRole userRole,
+						 @Bind("firstname") String firstName,
+						 @Bind("lastname") String lastName,
+						 @Bind("email") String email,
+						 @Bind("phone") String phone,
+						 @Bind("address") String address);
+
+
 	@RegisterMapper(UserMapper.class)
 	@SqlQuery("select * from user_temp")
 	List<User> selectUsers();
 
 	@RegisterMapper(UserMapper.class)
-	@SqlQuery("select * from user_temp where id = :id")
-	User selectUser(@Bind("id") long id);
+	@SqlQuery("select * from user_temp where email = :email")
+	User selectUser(@Bind("email") String email);
 
 	@SqlQuery("select id from user_temp where id = :userId")
 	String containsUser(@Bind("userId") String userId);
@@ -93,4 +103,10 @@ public interface Queries {
 
 	@SqlQuery("select uid from loan_temp where id= :id")
 	String selectLoanApplicationUserId(@Bind("id") long lid);
+
+
+
+	@SqlUpdate("update loan_temp set loan_status = :loan_status where id = :id" )
+	int updateLoanApplicationStatus(@Bind("id") long lid,
+									   @Bind("loan_status") String loanStatus);
 }

@@ -11,6 +11,7 @@ import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
+import javax.ws.rs.NotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,21 +48,27 @@ public class ApplicationClient {
 				final BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(i).getEntity();
 				final String fileName = bodyParts.get(i).getContentDisposition().getFileName();
 				final String fileKeyName = String.join("_", userId, String.valueOf(loanId), fileName);
-
-				if (saveFile(bodyPartEntity.getInputStream(), fileKeyName)) { // Can do retries fi need be
+				final boolean isUploadSuccessful = saveFile(bodyPartEntity.getInputStream(), fileKeyName);
+				if (isUploadSuccessful) { // Can do retries fi need be
 					final String uuid = UUID.randomUUID().toString();
 					dbQueries.newLoanFileQuery(uuid, loanId, fileKeyName, fileName);
 
 				}
 			}
 		}
-		final LoanData res = new LoanData.LoanDataBuilder()
-				.withLoanId(loanId)
-				.withLoanType(loanData.getLoanType())
-				.withLoanStatus(LoanStatus.NEW)
-				.withRequestLoanAmount(loanData.getRequestLoanAmount())
-				.build();
-		return res;
+		loanData.setLoanId(loanId);
+		loanData.setLoanStatus(LoanStatus.NEW);
+
+		return loanData;
+//		final LoanData res = new LoanData.LoanDataBuilder()
+//				.withLoanId(loanId)
+//				.withLoanType(loanData.getLoanType())
+//				.withLoanStatus(LoanStatus.NEW)
+//				.withRequestLoanAmount(loanData.getRequestLoanAmount())
+//				.withSalary(loanData.getSalary())
+//				.withCreditScore(loanData.getCreditScore())
+//				.build();
+//		return res;
 	}
 
 	public void newUser(final User user) {
@@ -103,12 +110,16 @@ public class ApplicationClient {
 		return dbQueries.selectLoanApplicationFileKeyName(loanId);
 	}
 
-	public boolean containsUser(final String userId) {
-		final String dbUserId =  dbQueries.containsUser(userId);
-		if (Strings.isNullOrEmpty(dbUserId)) {
-			return false;
+	public User selectUser(final String email) {
+		if (!Strings.isNullOrEmpty(email)) {
+			return dbQueries.selectUser(email);
 		}
-		return dbUserId.equalsIgnoreCase(userId);
+		throw new NotFoundException("Not an existing user");
+	}
+
+	public int userUpdate(final User user) {
+		return dbQueries.updateUserQuery(user.getUserId(), user.getUserRole(), user.getFirstName(),
+				user.getLastName(), user.getEmail(), user.getPhone(), user.getAddress());
 	}
 
 	private boolean saveFile(final InputStream file, final String keyName) {
@@ -117,5 +128,9 @@ public class ApplicationClient {
 
 	private String getLoanApplicationUserId(final long loanId) {
 		return dbQueries.selectLoanApplicationUserId(loanId);
+	}
+
+	public int updateLoanStatus(final long loanId, final LoanStatus loanStatus) {
+		return dbQueries.updateLoanApplicationStatus(loanId,loanStatus.getLoanStatus());
 	}
 }

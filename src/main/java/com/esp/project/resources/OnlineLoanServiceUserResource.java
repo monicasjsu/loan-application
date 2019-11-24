@@ -35,6 +35,7 @@ public class OnlineLoanServiceUserResource {
 	public Response signUpUser(@Auth final AccessTokenPrincipal tokenPrincipal, final User userData) {
 		try {
 			userData.setUserId(tokenPrincipal.getUserId());
+			userData.setEmail(tokenPrincipal.getEmail());
 			applicationClient.newUser(userData);
 			return Response.ok().build();
 		}
@@ -45,8 +46,17 @@ public class OnlineLoanServiceUserResource {
 
 	@GET
 	@Path("/user-profile")
-	public Response haveUserProfile(@Auth final AccessTokenPrincipal tokenPrincipal) {
-		boolean isUser = applicationClient.containsUser(tokenPrincipal.getUserId());
-		return Response.ok(of("isUser", isUser)).build();
+	public Response hasUserProfile(@Auth final AccessTokenPrincipal tokenPrincipal, final String email ) {
+		final User userDataInfo = applicationClient.selectUser(tokenPrincipal.getEmail());
+		return Response.ok(userDataInfo).build();
+	}
+
+	@POST
+	@Path("/update-user")
+	public Response updateUserQuery(@Auth final AccessTokenPrincipal tokenPrincipal, final User userData) {
+		userData.setUserId(tokenPrincipal.getUserId());
+		userData.setEmail(tokenPrincipal.getEmail());
+		applicationClient.userUpdate(userData);
+		return Response.ok().build();
 	}
 }
