@@ -90,18 +90,15 @@ public class OnlineLoanServiceApplicationsResource {
 		}
 	}
 
-	@Path("/users/{userId}/filenames/{loanId}") // See even if this needs some filtering right now user can pull all loans
+	@Path("/filenames/{loanId}") // See even if this needs some filtering right now user can pull all loans
 	@GET
 	public Response getLoanApplicationFileNames(@Auth final AccessTokenPrincipal tokenPrincipal,
-	                                            @PathParam("userId") final String userId,
 	                                            @PathParam("loanId") final long loanId) {
 		try {
-			if (tokenPrincipal.getUserId().equalsIgnoreCase(userId)) {
-				final List<FileData> fileNames = applicationClient.getLoanApplicationFilesWithResourceUrl(loanId);
-				return Response.ok(fileNames).build();
-			} else {
-				return forbiddenRequest();
-			}
+			final String userId = tokenPrincipal.getUserId();
+			final boolean isApprover = tokenPrincipal.getGroups().contains("LoanAppAdmin");
+			final List<FileData> fileNames = applicationClient.getLoanApplicationFilesWithResourceUrl(loanId, userId, isApprover);
+			return Response.ok(fileNames).build();
 		} catch (Exception ex) {
 			return exception("NewApplicationLoan exception", ex);
 		}

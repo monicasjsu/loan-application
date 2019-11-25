@@ -14,10 +14,11 @@ import java.util.List;
 public interface Queries {
 
 	@SqlUpdate("INSERT INTO file_temp " +
-			"(id, lid, file_key_name, file_name) " +
-			"VALUES (:id, :lid, :file_key_name, :file_name);")
+			"(id, lid, file_key_name, file_name, user_id) " +
+			"VALUES (:id, :lid, :file_key_name, :file_name, :user_id);")
 	int newLoanFileQuery(@Bind("id") String uuid,
 	                     @Bind("lid") long loanId,
+	                     @Bind("user_id") String user_id,
 	                     @Bind("file_key_name") String fileKeyName,
 	                     @Bind("file_name") String fileName);
 
@@ -96,10 +97,11 @@ public interface Queries {
 	LoanData selectLoanApplication(@Bind("id") long lid);
 
 	@SqlQuery("select file_name from file_temp where lid= :lid")
-	List<String> selectLoanApplicationFileName(@Bind("lid") long lid);
+	List<String> loanApplicationFileNameForApprover(@Bind("lid") long lid);
 
-	@SqlQuery("select file_key_name from file_temp where lid= :lid")
-	List<String> selectLoanApplicationFileKeyName(@Bind("lid") long lid);
+	@SqlQuery("select file_key_name from file_temp where lid= :lid and user_id = :user_id")
+	List<String> selectLoanApplicationFileKeyName(@Bind("lid") long lid ,
+												  @Bind("user_id") String user_id);
 
 	@SqlQuery("select uid from loan_temp where id= :id")
 	String selectLoanApplicationUserId(@Bind("id") long lid);

@@ -51,7 +51,7 @@ public class ApplicationClient {
 				final boolean isUploadSuccessful = saveFile(bodyPartEntity.getInputStream(), fileKeyName);
 				if (isUploadSuccessful) { // Can do retries fi need be
 					final String uuid = UUID.randomUUID().toString();
-					dbQueries.newLoanFileQuery(uuid, loanId, fileKeyName, fileName);
+					dbQueries.newLoanFileQuery(uuid, loanId, userId, fileKeyName, fileName);
 
 				}
 			}
@@ -96,18 +96,30 @@ public class ApplicationClient {
 		return dbQueries.selectLoanApplications(FETCH_SIZE /* limit */);
 	}
 
-	public List<FileData> getLoanApplicationFilesWithResourceUrl(final long loanId) {
-		final List<String> fileKeyNames = getLoanApplicationFileKeyNames(loanId);
+	public List<FileData> getLoanApplicationFilesWithResourceUrl(final long loanId,
+																 final String userId,
+																 final boolean isApprover) {
+		final List<String> fileKeyNames;
+		if (isApprover) {
+			fileKeyNames = getLoanApplicationForApprover(loanId);
+		} else {
+			fileKeyNames = getLoanApplicationFileKeyNames(loanId, userId);
+		}
 		final List<FileData> fileDataList = new ArrayList<>();
 		for (String fileKeyName : fileKeyNames) {
-			fileDataList.add(new FileData(fileKeyName.substring(fileKeyName.indexOf("_") + 1),
-					amazonClient.getS3ObjectUrlWithExpiration(BUCKET_NAME, fileKeyName)));
+			String fileName = fileKeyName.substring(fileKeyName.indexOf("_") + 1);
+			String fileTempUrl = amazonClient.getS3ObjectUrlWithExpiration(BUCKET_NAME, fileKeyName);
+			fileDataList.add(new FileData(fileName, fileTempUrl));
 		}
 		return fileDataList;
 	}
 
-	public List<String> getLoanApplicationFileKeyNames(final long loanId) {
-		return dbQueries.selectLoanApplicationFileKeyName(loanId);
+	public List<String> getLoanApplicationForApprover(final long loanId) {
+		return dbQueries.loanApplicationFileNameForApprover(loanId);
+	}
+
+	public List<String> getLoanApplicationFileKeyNames(final long loanId, final String userId) {
+		return dbQueries.selectLoanApplicationFileKeyName(loanId, userId);
 	}
 
 	public User selectUser(final String email) {
