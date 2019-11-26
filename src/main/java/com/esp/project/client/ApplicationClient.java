@@ -93,7 +93,7 @@ public class ApplicationClient {
 		} else if (loanType != null) {
 			return dbQueries.selectLoanApplicationsWithType(loanType.getLoanType(), FETCH_SIZE);
 		}
-		return dbQueries.selectLoanApplications(FETCH_SIZE /* limit */);
+		return dbQueries.selectLoanApplications(FETCH_SIZE /* limit */ );
 	}
 
 	public List<FileData> getLoanApplicationFilesWithResourceUrl(final long loanId,
@@ -107,7 +107,7 @@ public class ApplicationClient {
 		}
 		final List<FileData> fileDataList = new ArrayList<>();
 		for (String fileKeyName : fileKeyNames) {
-			String fileName = fileKeyName.substring(fileKeyName.indexOf("_") + 1);
+			String fileName = fileKeyName.substring(fileKeyName.indexOf("_", (fileKeyName.indexOf("_") + 1))+1);
 			String fileTempUrl = amazonClient.getS3ObjectUrlWithExpiration(BUCKET_NAME, fileKeyName);
 			fileDataList.add(new FileData(fileName, fileTempUrl));
 		}

@@ -10,15 +10,33 @@ import java.sql.Timestamp;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoanData {
 	@JsonProperty("loanId") private long loanId;
+	@JsonProperty("userId") private String userId;
+	@JsonProperty("firstName") private String firstName;
+	@JsonProperty("lastName") private String lastName;
 	@JsonProperty("loanType") private LoanType loanType;
 	@JsonProperty("loanStatus") private LoanStatus loanStatus;
 	@JsonProperty("requestLoanAmount") private double requestLoanAmount;
-	@JsonProperty("userId") private String userId;
 	@JsonProperty("salary") private double salary;
 	@JsonProperty("creditScore") private int creditScore;
 	@JsonProperty("companyName") private String companyName;
 	@JsonProperty("created") private Timestamp created;
 	@JsonProperty("lastUpdated") private Timestamp lastUpdated;
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	public long getLoanId() {
 		return loanId;
@@ -102,6 +120,8 @@ public class LoanData {
 
 	public static class LoanDataBuilder {
 		private long loanId;
+		private String firstName;
+		private String lastName;
 		private LoanType loanType;
 		private LoanStatus loanStatus;
 		private double requestLoanAmount;
@@ -137,6 +157,16 @@ public class LoanData {
 			return this;
 		}
 
+		public LoanDataBuilder withFirstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+
+		public LoanDataBuilder withLastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+
 		public LoanDataBuilder withSalary(double salary) {
 			this.salary = salary;
 			return this;
@@ -166,6 +196,8 @@ public class LoanData {
 		public LoanData build() {
 			LoanData loanData = new LoanData();
 			loanData.setLoanId(loanId);
+			loanData.setFirstName(firstName);
+			loanData.setLastName(lastName);
 			loanData.setLoanType(loanType);
 			loanData.setLoanStatus(loanStatus);
 			loanData.setRequestLoanAmount(requestLoanAmount);

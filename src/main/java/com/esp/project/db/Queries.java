@@ -69,31 +69,66 @@ public interface Queries {
 	String containsUser(@Bind("userId") String userId);
 
 	@RegisterMapper(LoanDataMapper.class)
-	@SqlQuery("select * from loan_temp where uid = :uid")
+	@SqlQuery("SELECT loan_temp.id, loan_temp.uid, loan_temp.loan_type, loan_temp.loan_status,"+
+			"loan_temp.request_amount,loan_temp.salary,loan_temp.credit_score,loan_temp.company_name,"+
+			"loan_temp.created, loan_temp.last_updated, user_temp.firstname, user_temp.lastname "+
+			"FROM loan_temp "+
+			"INNER JOIN user_temp " +
+			"ON loan_temp.uid = user_temp.id "+
+			"WHERE loan_temp.uid = :uid")
 	List<LoanData> selectUserLoanApplications(@Bind("uid") String uid);
 
 	@RegisterMapper(LoanDataMapper.class)
-	@SqlQuery("select * from loan_temp where loan_type= :loan_type and loan_status = :loan_status limit = :size")
+	@SqlQuery("SELECT loan_temp.id, loan_temp.uid, loan_temp.loan_type, loan_temp.loan_status,"+
+			"loan_temp.request_amount,loan_temp.salary,loan_temp.credit_score,loan_temp.company_name,"+
+			"loan_temp.created, loan_temp.last_updated, user_temp.firstname, user_temp.lastname "+
+			"FROM loan_temp "+
+			"INNER JOIN user_temp " +
+			"ON loan_temp.uid = user_temp.id "+
+			"WHERE loan_temp.loan_type=:loan_type and loan_temp.loan_status=:loan_status limit :size;")
 	List<LoanData> selectLoanApplicationsWithTypeAndStatus(@Bind("loan_type") String loanType,
 	                                                       @Bind("loan_status") String loanStatus,
 	                                                       @Bind("size") int size);
 
 	@RegisterMapper(LoanDataMapper.class)
-	@SqlQuery("select * from loan_temp where loan_type= :loan_type limit :size")
+	@SqlQuery("SELECT loan_temp.id, loan_temp.uid, loan_temp.loan_type, loan_temp.loan_status,"+
+			"loan_temp.request_amount,loan_temp.salary,loan_temp.credit_score,loan_temp.company_name,"+
+			"loan_temp.created, loan_temp.last_updated, user_temp.firstname, user_temp.lastname "+
+			"from loan_temp "+
+			"INNER JOIN user_temp " +
+			"ON loan_temp.uid = user_temp.id " +
+			"WHERE loan_temp.loan_type=:loan_type limit :size;")
 	List<LoanData> selectLoanApplicationsWithType(@Bind("loan_type") String loanType,
 	                                              @Bind("size") int size);
 
 	@RegisterMapper(LoanDataMapper.class)
-	@SqlQuery("select * from loan_temp where loan_status = :loan_status limit :size")
+	@SqlQuery("SELECT loan_temp.id, loan_temp.uid, loan_temp.loan_type, loan_temp.loan_status,"+
+			"loan_temp.request_amount,loan_temp.salary,loan_temp.credit_score,loan_temp.company_name,"+
+			"loan_temp.created, loan_temp.last_updated, user_temp.firstname, user_temp.lastname "+
+			"from loan_temp "+
+			"INNER JOIN user_temp " +
+			"ON loan_temp.uid = user_temp.id "+
+			"WHERE loan_temp.loan_status=:loan_status limit :size;")
 	List<LoanData> selectLoanApplicationsWithStatus(@Bind("loan_status") String loanStatus,
 	                                                @Bind("size") int size);
 
     @RegisterMapper(LoanDataMapper.class)
-	@SqlQuery("select * from loan_temp limit :size")
+	@SqlQuery("SELECT loan_temp.id, loan_temp.uid, loan_temp.loan_type, loan_temp.loan_status,"+
+			"loan_temp.request_amount,loan_temp.salary,loan_temp.credit_score,loan_temp.company_name,"+
+			"loan_temp.created, loan_temp.last_updated, user_temp.firstname, user_temp.lastname "+
+			"FROM loan_temp "+
+			"INNER JOIN user_temp " +
+			"ON loan_temp.uid=user_temp.id;")
 	List<LoanData> selectLoanApplications(@Bind("size") int size);
 
 	@RegisterMapper(LoanDataMapper.class)
-	@SqlQuery("select * from loan_temp where id = :id")
+	@SqlQuery("SELECT loan_temp.id, loan_temp.uid, loan_temp.loan_type, loan_temp.loan_status,"+
+			"loan_temp.request_amount,loan_temp.salary,loan_temp.credit_score,loan_temp.company_name,"+
+			"loan_temp.created, loan_temp.last_updated, user_temp.firstname, user_temp.lastname "+
+			"FROM loan_temp "+
+			"INNER JOIN user_temp " +
+			"ON loan_temp.uid=user_temp.id " +
+			"WHERE loan_temp.id = :id")
 	LoanData selectLoanApplication(@Bind("id") long lid);
 
 	@SqlQuery("select file_name from file_temp where lid= :lid")
@@ -106,9 +141,7 @@ public interface Queries {
 	@SqlQuery("select uid from loan_temp where id= :id")
 	String selectLoanApplicationUserId(@Bind("id") long lid);
 
-
-
 	@SqlUpdate("update loan_temp set loan_status = :loan_status where id = :id" )
 	int updateLoanApplicationStatus(@Bind("id") long lid,
-									   @Bind("loan_status") String loanStatus);
+									@Bind("loan_status") String loanStatus);
 }

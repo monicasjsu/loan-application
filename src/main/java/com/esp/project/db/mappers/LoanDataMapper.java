@@ -14,6 +14,8 @@ public class LoanDataMapper implements ResultSetMapper<LoanData> {
 	public LoanData map(final int index, final ResultSet r, final StatementContext ctx) throws SQLException {
 		return new LoanData.LoanDataBuilder()
 				.withLoanId(r.getLong("id"))
+				.withFirstName(r.getString("firstname"))
+				.withLastName(r.getString("lastname"))
 				.withUserId(r.getString("uid"))
 				.withLoanType(LoanType.fromString(r.getString("loan_type")))
 				.withLoanStatus(LoanStatus.fromString(r.getString("loan_status")))

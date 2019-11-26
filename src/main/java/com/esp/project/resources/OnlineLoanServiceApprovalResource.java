@@ -49,6 +49,5 @@ public class OnlineLoanServiceApprovalResource {
 		} catch (Exception ex) {
 			return exception("Error while updating the status", ex);
 		}
-
 	}
 }

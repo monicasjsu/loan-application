@@ -20,6 +20,7 @@ public class AwsConfig {
 	}
 
 	public String getSecretKey() {
+
 		return secretKey;
 	}
 }
