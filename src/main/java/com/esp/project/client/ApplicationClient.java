@@ -39,7 +39,7 @@ public class ApplicationClient {
 		long loanId = dbQueries.newLoanApplicationQuery(userId, loanData.getLoanType(),
 				loanData.getRequestLoanAmount(), loanData.getSalary(), loanData.getCreditScore(),
 				loanData.getCompanyName());
-		if (loanId != 0) {
+		if (loanId != 0 && bodyParts != null) {
 			for (int i = 0; i < bodyParts.size(); i++) {
 				/*
 				 * Casting FormDataBodyPart to BodyPartEntity, which can give us

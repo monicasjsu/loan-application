@@ -131,7 +131,7 @@ public interface Queries {
 			"WHERE loan_temp.id = :id")
 	LoanData selectLoanApplication(@Bind("id") long lid);
 
-	@SqlQuery("select file_name from file_temp where lid= :lid")
+	@SqlQuery("select file_key_name from file_temp where lid= :lid")
 	List<String> loanApplicationFileNameForApprover(@Bind("lid") long lid);
 
 	@SqlQuery("select file_key_name from file_temp where lid= :lid and user_id = :user_id")
