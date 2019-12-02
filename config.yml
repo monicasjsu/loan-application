@@ -63,9 +63,9 @@ database:
 
 
 oktaOAuth:
-  baseUrl: https://sjsutechnocrats.okta.com/
-  issuer: https://sjsutechnocrats.okta.com/oauth2/default
-  clientId: 0oa1sn6ma5YfSL2Qe357
+  baseUrl: https://dev-221342.okta.com
+  issuer: https://dev-221342.okta.com/oauth2/default
+  clientId: 0oa22pf44eYSsU1Up357
   clientSecret:
   audience: api://default
   rolesClaim: loanAppGroups
