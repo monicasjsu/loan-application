@@ -34,8 +34,7 @@ public class ApplicationClient {
 
 	public LoanData newLoanApplication(final String userId,
 	                                   final LoanData loanData,
-	                                   final List<FormDataBodyPart> bodyParts,
-	                                   final FormDataContentDisposition fileDispositions) {
+	                                   final List<FormDataBodyPart> bodyParts) {
 		long loanId = dbQueries.newLoanApplicationQuery(userId, loanData.getLoanType(),
 				loanData.getRequestLoanAmount(), loanData.getSalary(), loanData.getCreditScore(),
 				loanData.getCompanyName());
@@ -49,7 +48,7 @@ public class ApplicationClient {
 				final String fileName = bodyParts.get(i).getContentDisposition().getFileName();
 				final String fileKeyName = String.join("_", userId, String.valueOf(loanId), fileName);
 				final boolean isUploadSuccessful = saveFile(bodyPartEntity.getInputStream(), fileKeyName);
-				if (isUploadSuccessful) { // Can do retries fi need be
+				if (isUploadSuccessful) { // Can do retries if need be
 					final String uuid = UUID.randomUUID().toString();
 					dbQueries.newLoanFileQuery(uuid, loanId, userId, fileKeyName, fileName);
 
@@ -60,6 +59,9 @@ public class ApplicationClient {
 		loanData.setLoanStatus(LoanStatus.NEW);
 
 		return loanData;
+
+		// Reson to have the below object is to hide the salary and other stuff
+
 //		final LoanData res = new LoanData.LoanDataBuilder()
 //				.withLoanId(loanId)
 //				.withLoanType(loanData.getLoanType())
@@ -122,19 +124,19 @@ public class ApplicationClient {
 		return dbQueries.selectLoanApplicationFileKeyName(loanId, userId);
 	}
 
-	public User selectUser(final String email) {
+	public User getUser(final String email) {
 		if (!Strings.isNullOrEmpty(email)) {
 			return dbQueries.selectUser(email);
 		}
 		throw new NotFoundException("Not an existing user");
 	}
 
-	public int userUpdate(final User user) {
+	public int updateUser(final User user) {
 		return dbQueries.updateUserQuery(user.getUserId(), user.getUserRole(), user.getFirstName(),
 				user.getLastName(), user.getEmail(), user.getPhone(), user.getAddress());
 	}
 
-	private boolean saveFile(final InputStream file, final String keyName) {
+	protected boolean saveFile(final InputStream file, final String keyName) {
 		return amazonClient.putS3Object(file, "", keyName);
 	}
 

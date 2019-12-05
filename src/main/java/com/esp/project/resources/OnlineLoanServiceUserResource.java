@@ -46,8 +46,8 @@ public class OnlineLoanServiceUserResource {
 
 	@GET
 	@Path("/user-profile")
-	public Response hasUserProfile(@Auth final AccessTokenPrincipal tokenPrincipal, final String email ) {
-		final User userDataInfo = applicationClient.selectUser(tokenPrincipal.getEmail());
+	public Response hasUserProfile(@Auth final AccessTokenPrincipal tokenPrincipal) {
+		final User userDataInfo = applicationClient.getUser(tokenPrincipal.getEmail());
 		return Response.ok(userDataInfo).build();
 	}
 
@@ -56,7 +56,7 @@ public class OnlineLoanServiceUserResource {
 	public Response updateUserQuery(@Auth final AccessTokenPrincipal tokenPrincipal, final User userData) {
 		userData.setUserId(tokenPrincipal.getUserId());
 		userData.setEmail(tokenPrincipal.getEmail());
-		applicationClient.userUpdate(userData);
+		applicationClient.updateUser(userData);
 		return Response.ok().build();
 	}
 }

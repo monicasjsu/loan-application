@@ -26,7 +26,7 @@ public interface Queries {
 	@SqlUpdate("INSERT INTO loan_temp " +
 			"(uid, loan_type, request_amount, salary, credit_score, company_name) " +
 			"VALUES (:uid, :loan_type, :request_amount, :salary, :credit_score, :company_name);")
-	int newLoanApplicationQuery(@Bind("uid") String uid,
+	long newLoanApplicationQuery(@Bind("uid") String uid,
 	                            @Bind("loan_type") LoanType loanType,
 	                            @Bind("request_amount") double requestAmount,
 	                            @Bind("salary") double salary,

@@ -3,6 +3,7 @@ package com.esp.project.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Objects;
 
 import java.sql.Timestamp;
 
@@ -192,7 +193,6 @@ public class LoanData {
 			return this;
 		}
 
-
 		public LoanData build() {
 			LoanData loanData = new LoanData();
 			loanData.setLoanId(loanId);
@@ -209,5 +209,29 @@ public class LoanData {
 			loanData.setLastUpdated(lastUpdated);
 			return loanData;
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LoanData loanData = (LoanData) o;
+		return loanId == loanData.loanId &&
+				Double.compare(loanData.requestLoanAmount, requestLoanAmount) == 0 &&
+				Double.compare(loanData.salary, salary) == 0 &&
+				creditScore == loanData.creditScore &&
+				Objects.equal(userId, loanData.userId) &&
+				Objects.equal(firstName, loanData.firstName) &&
+				Objects.equal(lastName, loanData.lastName) &&
+				loanType == loanData.loanType &&
+				loanStatus == loanData.loanStatus &&
+				Objects.equal(companyName, loanData.companyName) &&
+				Objects.equal(created, loanData.created) &&
+				Objects.equal(lastUpdated, loanData.lastUpdated);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(loanId, userId, firstName, lastName, loanType, loanStatus, requestLoanAmount, salary, creditScore, companyName, created, lastUpdated);
 	}
 }

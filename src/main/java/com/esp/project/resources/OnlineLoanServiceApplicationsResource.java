@@ -42,12 +42,11 @@ public class OnlineLoanServiceApplicationsResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response newLoanApplication(@PathParam("userId") final String userId,
 	                                   @FormDataParam("loanData") final LoanData loanData,
-	                                   @FormDataParam("files") final List<FormDataBodyPart> bodyParts,
-	                                   @FormDataParam("files") final FormDataContentDisposition fileDispositions) {
+	                                   @FormDataParam("files") final List<FormDataBodyPart> bodyParts) {
 		try {
 			if (loanData != null) {
 				LoanData newLoanData = applicationClient.newLoanApplication(userId, loanData,
-						bodyParts, fileDispositions);
+						bodyParts);
 				return Response.ok(newLoanData).build();
 			} else {
 				return badRequest("NewApplicationLoan exception", "loanData");

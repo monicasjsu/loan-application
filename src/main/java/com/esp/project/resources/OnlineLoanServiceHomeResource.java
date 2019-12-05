@@ -19,7 +19,6 @@ public class OnlineLoanServiceHomeResource {
 	@GET
 	@Path("/health")
 	public Response getHealth() {
-
 		return Response.ok(of("isAlive", true)).build();
 	}
 

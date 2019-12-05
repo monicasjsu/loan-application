@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.annotation.Nonnull;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -166,5 +167,27 @@ public class User {
 			user.userId = this.userId;
 			return user;
 		}
+	}
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(userId, user.userId) &&
+				userRole == user.userRole &&
+				firstName.equals(user.firstName) &&
+				Objects.equals(lastName, user.lastName) &&
+				email.equals(user.email) &&
+				Objects.equals(phone, user.phone) &&
+				Objects.equals(address, user.address) &&
+				Objects.equals(created, user.created) &&
+				Objects.equals(lastUpdated, user.lastUpdated);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId, userRole, firstName, lastName, email, phone, address, created, lastUpdated);
 	}
 }

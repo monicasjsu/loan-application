@@ -18,13 +18,11 @@ public class OnlineLoanServiceAuthResource {
 	private final OktaOAuthConfig config;
 
 	public OnlineLoanServiceAuthResource(OktaOAuthConfig config) {
-
 		this.config = config;
 	}
 
 	@GET
 	public OktaOAuthConfig getConfig() {
-
 		return config;
 	}
 }

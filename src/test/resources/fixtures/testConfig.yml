@@ -1,0 +1,33 @@
+environment:
+  name: testing
+
+database:
+  driverClass: com.mysql.cj.jdbc.Driver
+  user: admin
+  password: password
+  url: jdbc:mysql://loan-application.com
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  validationQueryTimeout: 3s
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: false
+  evictionInterval: 10s
+  minIdleTime: 1 minute
+
+
+oktaOAuth:
+  baseUrl: testBaseUrl
+  issuer: testIssuer
+  clientId: testClientId
+  clientSecret: testClientSecret
+  audience: testAudience
+  rolesClaim: testRolesClaim
+#  audience: 0oa1sn6ma5YfSL2Qe357  # defaults to 'api://default'
+
+aws:
+  accessKey: testAccessKey
+  secretKey: testSecretKey
+

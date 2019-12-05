@@ -43,4 +43,5 @@ public class OnlineLoanServiceConfiguration extends Configuration {
 	public AwsConfig getAwsConfig() {
 		return awsConfig;
 	}
+
 }
