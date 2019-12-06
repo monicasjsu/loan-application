@@ -1,8 +1,16 @@
 - name: Deploy dropwizard loan-application backend applicaiton
   hosts: all
-  roles:
-    - role: geerlingguy.java
-      java_packages:
-        - java-1.8.0-openjdk
-  become: yes
+  become: ​yes
   become_user: root
+
+  tasks:
+    - name: Creates /mnt/loan-application
+      file:
+        path: /mnt/loan-application
+        state: directory
+      become: yes
+
+    - name: ​Copy​ ​jar file ​to​ ​/mnt/loan-application
+      copy:
+        src: /target/esp-project-1.0-SNAPSHOT.jar
+        dest: ​/mnt/loan-application
