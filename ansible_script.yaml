@@ -1,13 +1,30 @@
 - name: Deploy dropwizard loan-application backend applicaiton
   hosts: all
+  become: ​yes
+  become_user: root
 
   tasks:
-    - name: Creates /mnt/loan-application
+    - name: Creates /src/loan-application
       file:
-        path: /mnt/loan-application
+        path: /src/loan-application
         state: directory
+        mode: '777'
 
-    - name: ​Copy​ ​jar file ​to​ ​/mnt/loan-application
+    - name: ​Copy​ ​jar file ​to​ ​/src/loan-application
       copy:
-        src: ​target/esp-project-1.0-SNAPSHOT.jar
-        dest: ​/mnt/loan-application
+        src: /target/esp-project-1.0-SNAPSHOT.jar
+        dest: /home/centos/loan-application/
+        force: yes
+        owner: centos
+        mode: '777'
+
+    - name: ​Copy​ ​config file to ​/src/loan-application
+      copy:
+        src: /target/config.yml
+        dest: /home/centos/loan-application/
+        force: yes
+        owner: centos
+        mode: '777'
+
+    - name: run dropwizard
+      shell: nohup java -jar loan-application/esp-project-1.0-SNAPSHOT.jar server loan-application/config.yml > /dev/null &
