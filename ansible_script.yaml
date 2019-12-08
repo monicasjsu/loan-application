@@ -2,23 +2,25 @@
   hosts: all
   become: ​yes
   become_user: root
-
   tasks:
-    - name: ​Copy​ ​jar file ​to​ ​/src/loan-application
+    - name: Creates /home/centos/loan-application
+      file:
+        path: /home/centos/loan-application
+        state: directory
+        mode: '777'
+    - name: ​Copy​ jar file to​ ​/src/loan-application
       copy:
         src: /var/lib/jenkins/workspace/LoanApplicationAPI/target/esp-project-1.0-SNAPSHOT.jar
         dest: /home/centos/loan-application/
         force: yes
         owner: centos
         mode: '777'
-
-    - name: ​Copy​ ​config file to ​/src/loan-application
+    - name: ​Copy​ config file to /src/loan-application
       copy:
-        src: config.yml
-        dest: /var/lib/jenkins/workspace/LoanApplicationAPI/home/centos/loan-application/
+        src: /var/lib/jenkins/workspace/LoanApplicationAPI/config.yml
+        dest: /home/centos/loan-application/
         force: yes
         owner: centos
         mode: '777'
-
     - name: run dropwizard
       shell: nohup java -jar loan-application/esp-project-1.0-SNAPSHOT.jar server loan-application/config.yml > /dev/null &
