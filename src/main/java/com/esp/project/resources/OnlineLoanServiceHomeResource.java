@@ -13,7 +13,6 @@ import static com.google.common.collect.ImmutableSetMultimap.of;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
-@PermitAll
 public class OnlineLoanServiceHomeResource {
 
 	@GET
