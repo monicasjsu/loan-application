@@ -6,7 +6,7 @@
   tasks:
     - name: ​Copy​ ​jar file ​to​ ​/src/loan-application
       copy:
-        src: /target/esp-project-1.0-SNAPSHOT.jar
+        src: /var/lib/jenkins/workspace/LoanApplicationAPI/target/esp-project-1.0-SNAPSHOT.jar
         dest: /home/centos/loan-application/
         force: yes
         owner: centos
@@ -15,7 +15,7 @@
     - name: ​Copy​ ​config file to ​/src/loan-application
       copy:
         src: config.yml
-        dest: /home/centos/loan-application/
+        dest: /var/lib/jenkins/workspace/LoanApplicationAPI/home/centos/loan-application/
         force: yes
         owner: centos
         mode: '777'
