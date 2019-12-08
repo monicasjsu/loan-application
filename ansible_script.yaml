@@ -4,12 +4,6 @@
   become_user: root
 
   tasks:
-    - name: Creates /src/loan-application
-      file:
-        path: /src/loan-application
-        state: directory
-        mode: '777'
-
     - name: ​Copy​ ​jar file ​to​ ​/src/loan-application
       copy:
         src: /target/esp-project-1.0-SNAPSHOT.jar
@@ -20,7 +14,7 @@
 
     - name: ​Copy​ ​config file to ​/src/loan-application
       copy:
-        src: /target/config.yml
+        src: config.yml
         dest: /home/centos/loan-application/
         force: yes
         owner: centos
