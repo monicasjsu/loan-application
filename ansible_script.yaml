@@ -1,4 +1,4 @@
-- name: Deploy dropwizard loan-application backend applicaiton
+- name: Deploy dropwizard loan-application backend application
   hosts: all
   become: ​yes
   become_user: root
