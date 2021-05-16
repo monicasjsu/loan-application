@@ -18,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>1.3.16</dropwizard.version>
         <mainClass>com.esp.project.OnlineLoanServiceApplication</mainClass>
-        <junit>4.12</junit>
+        <junit>4.13.1</junit>
         <powermock>1.7.4</powermock>
     </properties>
 
